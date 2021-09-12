@@ -1,34 +1,113 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from "react";
 import "./Form.scss";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-
-const schema = yup.object.shape({
-  name: yup.string().required(),
-  email: yup.string().email().required(),
-  age: yup.number().positive().integer().required(),
-  password: yup.string().min(4).max(20).required(),
-});
+import fire from "../../../firebase/firebase";
+import SignIn from "./Signin";
+import LoginUser from "../Login/Login";
+import Status from "./Status/Status";
 
 const Form = () => {
-  return (
-    <div className="bg-text">
-      <div className="title">Sign Up</div>
-      <div className="inputs">
-        <form>
-          <input type="text" name="name" placeholder="Name..." />
-          <input type="text" name="email" placeholder="Email..." />
-          <input type="text" name="age" placeholder="Age..." />
-          <input type="text" name="password" placeholder="Password..." />
-          <input type="submit" className="submit" />
-          <br />
+  const [user, setUser] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [age, setAge] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [ageError, setAgeError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [hasAccount, setHasAccount] = useState(false);
 
-          <button type="submit" className="submit-google">
-            <span>or with</span> Google
-          </button>
-        </form>
-      </div>
+  const clearInputs = () => {
+    setEmail("");
+    setPassword("");
+    setAge("");
+    setName("");
+  };
+
+  const clearErrors = () => {
+    setEmailError("");
+    setNameError("");
+    setPasswordError("");
+    setAgeError("");
+  };
+
+  const handleLogin = () => {
+    clearErrors();
+    fire
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .catch((err) => {
+        switch (err.code) {
+          case "auth/invalid-email":
+          case "auth/user-disabled":
+          case "auth/user-not-found":
+            setEmailError(err.message);
+            break;
+          case "auth/wrong-password":
+            setPasswordError(err.message);
+            break;
+        }
+      });
+  };
+
+  const handleSignUp = () => {
+    clearErrors();
+    fire
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .catch((err) => {
+        switch (err.code) {
+          case "auth/email-already-use":
+          case "auth/invalid-email":
+            setEmailError(err.message);
+            break;
+          case "auth/weak-password":
+            setPasswordError(err.message);
+            break;
+        }
+      });
+  };
+
+  const handleLogout = () => {
+    fire.auth().signOut();
+  };
+
+  const authListener = () => {
+    fire.auth().onAuthStateChanged((user) => {
+      if (user) {
+        clearInputs();
+        setUser(user);
+      } else {
+        setUser("");
+      }
+    });
+  };
+
+  useEffect(() => {
+    authListener();
+  }, []);
+  return (
+    <div className="bg">
+      <LoginUser
+        emailError={emailError}
+        passwordError={passwordError}
+        ageError={ageError}
+        nameError={nameError}
+        setHasAccount={setHasAccount}
+        handleLogin={handleLogin}
+        handleSignUp={handleSignUp}
+        handleLogout={handleLogout}
+        hasAccount={hasAccount}
+        email={email}
+        password={password}
+        setEmail={setEmail}
+        setPassword={setPassword}
+        age={age}
+        setAge={setAge}
+        name={name}
+        setName={setName}
+      />
+      <Status handleLogout={handleLogout} />
     </div>
   );
 };

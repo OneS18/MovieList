@@ -1,4 +1,4 @@
-.bg-login {
+.bgg-login {
     background-color: rgb(0, 0, 0);
     /* Fallback color */
     background-color: rgba(0, 0, 0, 0.6);
@@ -8,13 +8,14 @@
     border: 3px solid #870505;
     position: absolute;
     top: 50%;
-    left: 70%;
+    left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
     width: 30rem;
     padding: 20px;
     text-align: center;
     border-radius: 10px;
+    justify-content: center;
 
     .title {
         color: rgb(141, 12, 12);
@@ -29,11 +30,58 @@
 
 }
 
-@media (max-width: 1200px) {
-    .bg-login {
-        width: 80%;
-        top: 120%;
-        left: 50%;
-        padding: 30px;
+// @media (max-width: 1200px) {
+//     .bg-login {
+//         width: 80%;
+//         top: 120%;
+//         left: 50%;
+//         padding: 30px;
+//     }
+// }
+
+.btnContainer {
+    font-size: 18px;
+}
+
+.account {
+    font-family: 'Nunito',
+        sans-serif;
+}
+
+.notaccount {
+    font-family: 'Nunito',
+        sans-serif;
+}
+
+.signinandsignup {
+    font-family: 'Nunito',
+        sans-serif;
+    background: #7e6c6c;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+    color: white;
+}
+
+.inputdata {
+    padding: 10px;
+    width: 100px;
+    background: #e80808;
+    border: none;
+    display: inline-block;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    color: white;
+    font-family: 'Nunito',
+        sans-serif;
+    font-weight: bold;
+
+    span {
+        font-family: 'Nunito',
+            sans-serif;
+        font-weight: bold;
+        font-size: 20px;
     }
 }
