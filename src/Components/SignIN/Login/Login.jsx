@@ -85,10 +85,12 @@ const LoginUser = (props) => {
             )}
           </div>
         </form>
-        <div className="welcome">{handleLogout}</div>
+        <div className="welcome">{}</div>
       </div>
     </div>
   );
 };
 
 export default LoginUser;
+
+// handleLogout;
